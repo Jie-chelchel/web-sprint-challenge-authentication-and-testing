@@ -17,8 +17,8 @@ function findBy(filter) {
   return db("users").where(filter);
 }
 module.exports = {
-  add,
   find,
+  add,
   findById,
   findBy,
 };
