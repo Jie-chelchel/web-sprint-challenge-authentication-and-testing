@@ -1,6 +1,6 @@
 const Users = require("./users-model.js");
 
-const validateRegistration = (req, res, next) => {
+const validateInput = (req, res, next) => {
   const { username, password } = req.body;
   if (username === undefined || password === undefined) {
     res.status(400).json({ message: "username and password required" });
@@ -20,6 +20,6 @@ const usernameExist = async (req, res, next) => {
 };
 
 module.exports = {
-  validateRegistration,
+  validateInput,
   usernameExist,
 };
