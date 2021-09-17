@@ -13,7 +13,7 @@ const usernameExist = async (req, res, next) => {
   const allUsers = await Users.find();
   const userExist = allUsers.find((u) => u.username === req.body.username);
   if (userExist) {
-    res.status(400).json({ message: "invalid credentials" });
+    res.status(400).json({ message: "username taken" });
   } else {
     next();
   }
