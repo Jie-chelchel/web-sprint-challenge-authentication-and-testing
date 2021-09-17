@@ -2,27 +2,20 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const Users = require("../users/users-model.js");
 const tokenBuilder = require("./token-builder");
-const {
-  validateRegistration,
-  usernameExist,
-} = require("../users/users-middleware");
+const { validateInput, usernameExist } = require("../users/users-middleware");
 
-router.post(
-  "/register",
-  validateRegistration,
-  usernameExist,
-  (req, res, next) => {
-    let user = req.body;
-    const hash = bcrypt.hashSync(user.password, 8);
-    user.password = hash;
-    Users.add(user)
-      .then((newUser) => {
-        res.status(201).json(newUser);
-      })
-      .catch((err) => {
-        next(err);
-      });
-    /*
+router.post("/register", validateInput, usernameExist, (req, res, next) => {
+  let user = req.body;
+  const hash = bcrypt.hashSync(user.password, 8);
+  user.password = hash;
+  Users.add(user)
+    .then((newUser) => {
+      res.status(201).json(newUser);
+    })
+    .catch((err) => {
+      next(err);
+    });
+  /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
     DO NOT EXCEED 2^8 ROUNDS OF HASHING!
@@ -47,13 +40,13 @@ router.post(
     4- On FAILED registration due to the `username` being taken,
       the response body should include a string exactly as follows: "username taken".
   */
-  }
-);
+});
 
-router.post("/login", (req, res, next) => {
+router.post("/login", validateInput, (req, res, next) => {
   let { username, password } = req.body;
   Users.findBy({ username })
     .then((user) => {
+      console.log(user);
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = tokenBuilder(user);
         res.status(200).json({
