@@ -1,3 +1,5 @@
+const Users = require("./users-model.js");
+
 const validateRegistration = (req, res, next) => {
   const { username, password } = req.body;
   if (username === undefined || password === undefined) {
@@ -7,6 +9,17 @@ const validateRegistration = (req, res, next) => {
   }
 };
 
+const usernameExist = async (req, res, next) => {
+  const allUsers = await Users.find();
+  const userExist = allUsers.find((u) => u.username === req.body.username);
+  if (userExist) {
+    res.status(400).json({ message: "invalid credentials" });
+  } else {
+    next();
+  }
+};
+
 module.exports = {
   validateRegistration,
+  usernameExist,
 };
