@@ -46,7 +46,6 @@ router.post("/login", validateInput, (req, res, next) => {
   let { username, password } = req.body;
   Users.findBy({ username })
     .then((user) => {
-      console.log(user);
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = tokenBuilder(user);
         res.status(200).json({
