@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const Users = require("../users/users-model.js");
+const { validateRegistration } = require("../users/users-middleware");
 
-router.post("/register", (req, res, next) => {
+router.post("/register", validateRegistration, (req, res, next) => {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, 8);
   user.password = hash;
